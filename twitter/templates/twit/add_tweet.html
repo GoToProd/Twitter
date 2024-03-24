@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+{% comment %} action="{% url "twit:add_tweet" %}" method="post"> {% endcomment %}
+    <form>
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="id_author_name" class="form-label">Имя автора:</label>
+                <input type="text" class="form-control" id="id_author_name" name="author" 
+                value="{% if form.author.value %}{{ form.author.value }}{% else %}Anonymouse{% endif %}"
+                not required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="id_text_tweet" class="form-label">Текст поста*:</label>
+                <input type="text" class="form-control" id="id_text_tweet" name="text_tweet" 
+                value="{% if form.text_tweet.value %}{{ form.text_tweet.value }}{% endif %}"
+                required>
+            {% if form.text_tweet.errors %}
+                <div class="alert alert-danger alert-dismissible fade show">{{form.text_tweet.errors}}</div>
+            {% endif %}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-dark">Опубликовать</button>
+    </form>
+
+
+{% endblock  %}

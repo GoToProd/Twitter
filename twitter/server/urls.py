@@ -18,9 +18,10 @@ from django.contrib import admin
 from django.urls import path
 
 
-from twit.views import index
+from twit.views import index, add_tweet
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
+    path('add_tweet/', add_tweet, name='add_tweet'),
 ]

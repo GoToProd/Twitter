@@ -12,4 +12,13 @@ def index(request):
         'tweets': tweets,
     }
     
-    return render(request, 'base.html', context)
+    return render(request, 'index.html', context)
+
+
+def add_tweet(request):
+    # tweet = request.POST.get('text')
+    context = {
+        'title': 'Twitter - Новый твит'
+    }
+
+    return render(request, 'twit/add_tweet.html', context)
