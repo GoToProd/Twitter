@@ -1,6 +1,9 @@
-from django.shortcuts import render
+from django.contrib import messages
+from django.forms import ValidationError
+from django.shortcuts import redirect, render
 
 
+from twit.forms import CreateNewTweet
 from twit.models import Tweet
 
 def index(request):
@@ -16,7 +19,28 @@ def index(request):
 
 
 def add_tweet(request):
-    # tweet = request.POST.get('text')
+    if request.method == 'POST':
+        form = CreateNewTweet(data=request.POST)
+        if form.is_valid():
+            try:
+                Tweet.objects.create(
+                    author = author,
+                    text_tweet = text_tweet,
+                )
+                
+                Tweet.save()                        
+                return redirect('index')
+            except ValidationError as e:
+                messages.error(request, str(e))
+                return redirect('twit:add_tweet')
+    else:
+        initial = {
+            'author': request.user.first_name,
+            'text_tweet': request.user.last_name,
+        }
+        
+        form = CreateNewTweet(initial=initial)
+
     context = {
         'title': 'Twitter - Новый твит'
     }
