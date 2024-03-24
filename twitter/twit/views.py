@@ -24,22 +24,22 @@ def add_tweet(request):
         if form.is_valid():
             try:
                 Tweet.objects.create(
-                    author = author,
-                    text_tweet = text_tweet,
+                    author = request.author,
+                    text_tweet = request.text_tweet,
                 )
-                
+
                 Tweet.save()                        
                 return redirect('index')
             except ValidationError as e:
                 messages.error(request, str(e))
                 return redirect('twit:add_tweet')
-    else:
-        initial = {
-            'author': request.user.first_name,
-            'text_tweet': request.user.last_name,
-        }
+    # else:
+        # initial = {
+        #     'author': request.author,
+        #     'text_tweet': request.text_tweet,
+        # }
         
-        form = CreateNewTweet(initial=initial)
+        # form = CreateNewTweet(initial=initial)
 
     context = {
         'title': 'Twitter - Новый твит'
