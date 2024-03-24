@@ -1,5 +1,3 @@
-from django.contrib import messages
-from django.forms import ValidationError
 from django.shortcuts import redirect, render
 
 
@@ -20,29 +18,18 @@ def index(request):
 
 def add_tweet(request):
     if request.method == 'POST':
-        form = CreateNewTweet(data=request.POST)
+        form = CreateNewTweet(request.POST)
         if form.is_valid():
-            try:
-                Tweet.objects.create(
-                    author = request.author,
-                    text_tweet = request.text_tweet,
-                )
-
-                Tweet.save()                        
-                return redirect('index')
-            except ValidationError as e:
-                messages.error(request, str(e))
-                return redirect('twit:add_tweet')
-    # else:
-        # initial = {
-        #     'author': request.author,
-        #     'text_tweet': request.text_tweet,
-        # }
-        
-        # form = CreateNewTweet(initial=initial)
+            author = form.cleaned_data['author']
+            text_tweet = form.cleaned_data['text_tweet']
+            Tweet.objects.create(author=author, text_tweet=text_tweet)
+            return redirect('index')
+    else:
+        form = CreateNewTweet()
 
     context = {
-        'title': 'Twitter - Новый твит'
+        'title': 'Twitter - Новый твит',
+        'form': form,
     }
 
     return render(request, 'twit/add_tweet.html', context)
